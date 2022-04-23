@@ -1,0 +1,23 @@
+version: '3'
+services:
+  mysql-db:
+    restart: always
+    container_name: mysql-db
+    image: mysql
+    environment:
+      MYSQL_DATABASE: user_database
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - 3306:3306
+  spring-boot-api:
+    restart: on-failure
+    build: ./
+    expose:
+      - "8080"
+    ports:
+      - 8080:8080
+    environment:
+      WAIT_HOSTS: mysql:3306
+    depends_on:
+      - mysql-db
